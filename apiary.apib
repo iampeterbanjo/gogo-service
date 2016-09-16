@@ -1,0 +1,28 @@
+### Start a New Match [POST]
+
+You can create a new match with this action. It takes information about the players and will set up a new game. The game will start at round 1, and it will be **black**'s turn to
+play. Per standard Go rules, **black** plays first.
+
++ Request (application/json)
+
+        {
+            "gridsize" : 19,
+            "playerWhite" : "bob",
+            "playerBlack" : "alfred"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /matches/5a003b78-409e-4452-b456-a6f0dcee05bd
+
+    + Body
+
+            {
+                "id" : "5a003b78-409e-4452-b456-a6f0dcee05bd",
+                "started_at": 13231239123391,
+                "gridsize" : 19,
+                "playerBlack" : "alfred",
+                "playerWhite" : "bob"
+            }
