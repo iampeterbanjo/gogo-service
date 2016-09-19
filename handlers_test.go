@@ -52,18 +52,19 @@ func TestCreateMatch(t *testing.T) {
 		t.Errorf("Expected response status 201, received %s", res.Status)
 	}
 
-	fmt.Printf("Payload: %s", string(payload))
-
-	loc, headerOk := res.Header["Location"]
-	if !headerOk {
-		t.Error("Location header is not set")
-	} else {
-		if !strings.Contains(loc[0], "/matches/") {
-			t.Errorf("Location header should contain '/matches'")
-		}
-
-		if len(loc[0]) != len(fakeMatchLocationResult) {
-			t.Errorf("Location value does not contain guid of new match")
+	if res.Header["Location"] == nil {
+		loc := res.Header["Location"]
+		if loc == nil {
+			t.Error("Location header is not set")
+		} else {
+			if !strings.Contains(loc[0], "/matches/") {
+				t.Errorf("Location header should contain '/matches/'")
+			}
+			if len(loc[0]) != len(fakeMatchLocationResult) {
+				t.Errorf("Location value does not contain guid of new match")
+			}
 		}
 	}
+
+	fmt.Printf("Payload: %s", string(payload))
 }
