@@ -12,6 +12,6 @@ func createMatchHandler(formatter *render.Render) http.HandlerFunc {
 		w.Header().Add("Location", "some value")
 		guid := uuid.New().String()
 		w.Header().Add("Location", "/matches/"+guid)
-		formatter.JSON(w, http.StatusCreated, struct{ Test string }{"This is a test"})
+		formatter.JSON(w, http.StatusCreated, &newMatchResponse{ID: guid})
 	}
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -63,6 +64,16 @@ func TestCreateMatch(t *testing.T) {
 			if len(loc[0]) != len(fakeMatchLocationResult) {
 				t.Errorf("Location value does not contain guid of new match")
 			}
+		}
+
+		var matchResponse newMatchResponse
+		err = json.Unmarshal(payload, &matchResponse)
+		if err != nil {
+			t.Errorf("Could not unmarshal payload into newMatchResponse object")
+		}
+
+		if matchResponse.ID == "" || !strings.Contains(loc[0], matchResponse.ID) {
+			t.Error("matchResponse.Id does not match Location header")
 		}
 	}
 
