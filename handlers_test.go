@@ -25,7 +25,8 @@ const (
 
 func TestCreateMatch(t *testing.T) {
 	client := &http.Client{}
-	server := httptest.NewServer(http.HandlerFunc(createMatchHandler(formatter)))
+	repo := newInMemoryRepository()
+	server := httptest.NewServer(http.HandlerFunc(createMatchHandler(formatter, repo)))
 	defer server.Close()
 
 	body := []byte("{\n  \"gridsize\": 19,\n  \"players\": [\n    {\n      \"color\": \"white\",\n      \"name\": \"bob\"\n    },\n    {\n      \"color\": \"black\",\n      \"name\": \"alfred\"\n    }\n  ]\n}")
@@ -74,6 +75,12 @@ func TestCreateMatch(t *testing.T) {
 
 		if matchResponse.ID == "" || !strings.Contains(loc[0], matchResponse.ID) {
 			t.Error("matchResponse.Id does not match Location header")
+		}
+
+		// After creating a match, match repository should have 1 item in it.
+		matches := repo.getMatches()
+		if len(matches) != 1 {
+			t.Errorf("Expected a match repo of 1 match, got size %d", len(matches))
 		}
 	}
 
